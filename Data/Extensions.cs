@@ -9,10 +9,9 @@ public static class Extensions
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<ApplicationDbContext>();
-                if (context.Database.EnsureCreated())
-                {
-                    DbInitializer.Initialize(context);
-                }
+                //if (context.Database.EnsureCreated()){
+                DbInitializer.Initialize(context);
+                //}
             }
         }
     }

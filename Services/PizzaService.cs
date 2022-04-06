@@ -15,25 +15,25 @@ public class PizzaService
 
     public IEnumerable<Topping> ToppingGetAll()
     {
-       return _context.Toppings
-        .AsNoTracking()
-        .ToList();
+        return _context.Toppings
+         .AsNoTracking()
+         .ToList();
 
     }
 
     public IEnumerable<Sauce> SauceGetAll()
     {
-       return _context.Sauces
-        .AsNoTracking()
-        .ToList();
+        return _context.Sauces
+         .AsNoTracking()
+         .ToList();
 
     }
 
     public IEnumerable<Pizza> GetAll()
     {
-       return _context.Pizzas
-        .AsNoTracking()
-        .ToList();
+        return _context.Pizzas
+         .AsNoTracking()
+         .ToList();
 
     }
 
@@ -42,20 +42,21 @@ public class PizzaService
     public Pizza? GetById(int id)
     {
 
-         return _context.Pizzas
-            .Include(p => p.Toppings)
-            .Include(p => p.Sauce)
-            .AsNoTracking()
-            .SingleOrDefault(p => p.Id == id);
+        return _context.Pizzas
+           .Include(p => p.Toppings)
+           .Include(p => p.Sauce)
+           .AsNoTracking()
+           .SingleOrDefault(p => p.Id == id);
 
     }
 
     public Pizza? Create(Pizza newPizza)
     {
-        
-        var pizza = new Pizza  {
-            Id=newPizza.Id,
-            Name=newPizza.Name
+
+        var pizza = new Pizza
+        {
+            Id = newPizza.Id,
+            Name = newPizza.Name
         };
 
         _context.Pizzas.Add(pizza);
@@ -73,28 +74,30 @@ public class PizzaService
         return newPizza;
     }
 
-    public void update(Pizza pizzaUpdate){
-                
+    public void update(Pizza pizzaUpdate)
+    {
+
         var piiza =
                 _context.Pizzas
         .Include(p => p.Toppings)
         .Include(p => p.Sauce)
-        .SingleOrDefault(p => p.Id ==  pizzaUpdate.Id);
+        .SingleOrDefault(p => p.Id == pizzaUpdate.Id);
 
-        foreach( Topping t in piiza.Toppings.ToList()){
-            piiza.Toppings.Remove(t);    
+        foreach (Topping t in piiza.Toppings.ToList())
+        {
+            piiza.Toppings.Remove(t);
         }
 
-        if(pizzaUpdate.Sauce.Id != piiza.Sauce.Id)
+        if (pizzaUpdate.Sauce.Id != piiza.Sauce.Id)
             piiza.Sauce = pizzaUpdate.Sauce;
-        
+
         _context.Pizzas.Update(piiza);
         _context.SaveChanges();
 
         pizzaUpdate.Toppings.ToList().ForEach(
             item => AddTopping(pizzaUpdate.Id, item.Id)
         );
-        
+
     }
 
     public void AddTopping(int PizzaId, int ToppingId)
@@ -107,7 +110,7 @@ public class PizzaService
             throw new NullReferenceException("Pizza or topping does not exist");
         }
 
-        if(pizzaToUpdate.Toppings is null)
+        if (pizzaToUpdate.Toppings is null)
         {
             pizzaToUpdate.Toppings = new List<Topping>();
         }
@@ -121,25 +124,26 @@ public class PizzaService
 
     public void UpdateSauce(int PizzaId, int SauceId)
     {
-            var pizzaToUpdate = _context.Pizzas.Find(PizzaId);
-            var sauceToUpdate = _context.Sauces.Find(SauceId);
+        var pizzaToUpdate = _context.Pizzas.Find(PizzaId);
+        var sauceToUpdate = _context.Sauces.Find(SauceId);
 
-            if (pizzaToUpdate is null || sauceToUpdate is null)
-            {
-                throw new NullReferenceException("Pizza or sauce         does not exist");
-            }
+        if (pizzaToUpdate is null || sauceToUpdate is null)
+        {
+            throw new NullReferenceException("Pizza or sauce         does not exist");
+        }
 
-            pizzaToUpdate.Sauce = sauceToUpdate;
+        pizzaToUpdate.Sauce = sauceToUpdate;
 
-            _context.SaveChanges();
+        _context.SaveChanges();
 
     }
 
     public void DeleteById(int id)
     {
-         var pizzaDel = _context.Pizzas.Find(id);
-        if(pizzaDel is null){
-            throw new NullReferenceException("Pizza does not exist");       
+        var pizzaDel = _context.Pizzas.Find(id);
+        if (pizzaDel is null)
+        {
+            throw new NullReferenceException("Pizza does not exist");
         }
         _context.Pizzas.Remove(pizzaDel);
         _context.SaveChanges();

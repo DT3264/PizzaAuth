@@ -7,12 +7,12 @@ namespace aspnetcore_react_auth.Data
         public static void Initialize(ApplicationDbContext context)
         {
 
-            // if (context.Pizzas.Any()
-            //     && context.Toppings.Any()
-            //     && context.Sauces.Any())
-            // {
-            //     return;   // DB has been seeded
-            // }
+            if (context.Pizzas.Any()
+                && context.Toppings.Any()
+                && context.Sauces.Any())
+            {
+                return;   // DB has been seeded
+            }
 
             var pepperoniTopping = new Topping { Name = "Pepperoni", Calories = 130 };
             var sausageTopping = new Topping { Name = "Sausage", Calories = 100 };
